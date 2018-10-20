@@ -11,13 +11,13 @@ try:
     Pin29.input()	
 
     while(1):
-        startTime  = time.perf_counter()
+        startTime  = time.clock()
         pinValue = Pin29.getValue();        
         if pinValue == 1:
             Pin27.high()
         else:
             Pin27.low()
-        print( time.perf_counter() - startTime)
+        print( time.clock() - startTime)
         time.sleep(5)
 
 finally:
