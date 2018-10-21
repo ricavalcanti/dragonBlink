@@ -2,26 +2,27 @@ from GPIOLibrary import GPIOProcessor
 import time
 
 GP = GPIOProcessor()
-state = 0
-timeToEnd = 15
 
 try:
-    Pin27 = GP.getPin27()
+    trig = GP.getPin29() 
     Pin27.out()
 
-    Pin29 = GP.getPin29()
+    echo = GP.getPin30() 
     Pin29.input()	
 
-    while(1):
-        Pin27.high()
-        startTime  = time.clock()
-        while(((time.clock() - startTime) * 100) < timeToEnd):
-            pinValue = Pin29.getValue();        
-            if pinValue == 1:
-                Pin27.low()
-                print( time.clock() - startTime)
-                break
-    time.sleep(5)
+    trig.low()
+    print("Wait for sensor to settle")
+    time.sleep(2)
+    trig.high()
+    time.sleep(0.00001)
+    trig.low()
+
+    while(echo.getValue == 0):
+        pulse_start = time.clock()
+    while(echo.getValue() == 1):
+        pulse_end = time.clock()
+    pulse_duration = pulse_end - pulse_start
+    print("Duration: " + str(pulse_duration))
 
 finally:
     GP.cleanup()
