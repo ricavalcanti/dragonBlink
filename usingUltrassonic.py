@@ -13,30 +13,28 @@ try:
     trig.low()
     print("Wait for sensor to settle")
     time.sleep(2)
-    pulseStart = 0
-    pulseEnd = 0
     while(1):
-    isOutR = False
-    init = time.clock()
-	pulseStart = init
-	trig.low()
-	time.sleep(0.000002)
+	pulseStart = 0
+	pulseEnd = 0
+    	isOutR = False
+    	init = time.clock()	
 	trig.high()
 	time.sleep(0.00001)
 	trig.low()
 	while(echo.getValue() == 0):
 		pulseStart = time.clock()
-		if(time.clock() - init > 0.03):
+		if(pulseStart - init > 0.3):
 			print("out of range")
-            isOutR = True
+            		isOutR = True
 			break
 	pulseEnd = time.clock()
-    while(echo.getValue() == 1 && (!isOutR)):
+    	while(echo.getValue() == 1):
 		pulseEnd = time.clock()
-    if(!isOutR):
-        distance = (pulseEnd - pulseStart)*17150
-	    distance = round(distance,2)
-	    print("Distance: "+ str(distance))
+    	if(not isOutR):
+        	distance = (pulseEnd - pulseStart)*17150
+	    	distance = round(distance,2)
+		if(distance < 20):
+	    		print("Distance: "+ str(distance))
 	time.sleep(2)
 
 finally:
