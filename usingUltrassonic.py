@@ -13,26 +13,34 @@ try:
     trig.low()
     print("Wait for sensor to settle")
     time.sleep(2)
-    
     pulseStart = 0
     pulseEnd = 0	
+    state = 0
    # while(echo.getValue == 0):
     #    pulse_start = time.clock()
    # while(echo.getValue() == 1):
     #    pulse_end = time.clock()
    # pulse_duration = pulse_end - pulse_start
     while(1):
+	trig.low()
+	time.sleep(0.000002)
 	trig.high()
 	time.sleep(0.00001)
 	trig.low()
+	init = time.clock()
+	pulseStart = init
 	while(echo.getValue() == 0):
-		pulseStart = time.time()
+		pulseStart = time.clock()
+		if(time.clock() - init > 0.03):
+			print("out of range")
+			break;
+	pulseEnd = time.clock()
     	while(echo.getValue() == 1):
-		pulseEnd = time.time()
+		pulseEnd = time.clock()
 	distance = (pulseEnd - pulseStart)*17150
 	distance = round(distance,2)
 	print("Distance: "+ str(distance))
-	time.sleep(1)
+	time.sleep(2)
 
 finally:
     GP.cleanup()
