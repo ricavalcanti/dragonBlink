@@ -34,14 +34,14 @@ jsonDevice = {"token":
                       },
                       {
                           "key": kCond,
-                          "tag": "Condutância",
+                          "tag": "Condutancia",
                           "unit": "miliSiemens/cm",
                           "type": "number"
                       },
                       {
                           "key": kTemp,
                           "tag": "Temperatura",
-                          "unit": "°C",
+                          "unit": "C",
                           "type": "number"
                       }
                   ]
