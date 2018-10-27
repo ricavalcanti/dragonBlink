@@ -1,6 +1,6 @@
 from GPIOLibrary import GPIOProcessor
 import time
-
+import numpy as np
 GP = GPIOProcessor()
 
 try:
@@ -13,11 +13,12 @@ try:
     trig.low()
     print("Wait for sensor to settle")
     time.sleep(2)
+    distances = []
     for i in range(15):
         pulseStart = 0
         pulseEnd = 0
-            isOutR = False
-            init = time.clock()	
+        isOutR = False
+        init = time.clock()	
         trig.high()
         time.sleep(0.00001)
         trig.low()
@@ -25,21 +26,23 @@ try:
             pulseStart = time.clock()
             if(pulseStart - init > 0.3):
                 print("out of range")
-                        isOutR = True
+                isOutR = True
                 break
         pulseEnd = time.clock()
-            while(echo.getValue() == 1):
+        while(echo.getValue() == 1):
             pulseEnd = time.clock()
-            if(not isOutR):
-                distance = (pulseEnd - pulseStart)*17150
-                distance = round(distance,2)
-            if(distance < 20 and distance >3) :
-                    print("Distance: "+ str(distance))
-                    distances.append(distance)
+        if(not isOutR):
+            distance = (pulseEnd - pulseStart)*17150
+            distance = round(distance,2)
+	    print(i)
+            if(distance < 20 and distance >3):
+                print("Distance: "+ str(distance))
+                distances.append(distance)
             else:
                 i = i-1
         time.sleep(2)
     print("Terminado")
-    
+    print(distances)
+    print(np.mean(distances))
 finally:
     GP.cleanup()
