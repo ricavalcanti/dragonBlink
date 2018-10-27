@@ -4,42 +4,39 @@ import time
 GP = GPIOProcessor()
 
 try:
-    trig = GP.getPin29() 
+    trig = GP.getPin29()
     trig.out()
 
-    echo = GP.getPin30() 
-    echo.input()	
+    echo = GP.getPin30()
+    echo.input()
 
     trig.low()
     print("Wait for sensor to settle")
     time.sleep(2)
     pulseStart = 0
-    pulseEnd = 0	
-    state = 0
-   # while(echo.getValue == 0):
-    #    pulse_start = time.clock()
-   # while(echo.getValue() == 1):
-    #    pulse_end = time.clock()
-   # pulse_duration = pulse_end - pulse_start
+    pulseEnd = 0
     while(1):
+    isOutR = False
+    init = time.clock()
+	pulseStart = init
 	trig.low()
 	time.sleep(0.000002)
 	trig.high()
 	time.sleep(0.00001)
 	trig.low()
-	init = time.clock()
-	pulseStart = init
 	while(echo.getValue() == 0):
 		pulseStart = time.clock()
 		if(time.clock() - init > 0.03):
 			print("out of range")
-			break;
+            isOutR = True
+			break
 	pulseEnd = time.clock()
-    	while(echo.getValue() == 1):
+    while(echo.getValue() == 1 && (!isOutR)):
 		pulseEnd = time.clock()
-	distance = (pulseEnd - pulseStart)*17150
-	distance = round(distance,2)
-	print("Distance: "+ str(distance))
+    if(!isOutR):
+        distance = (pulseEnd - pulseStart)*17150
+	    distance = round(distance,2)
+	    print("Distance: "+ str(distance))
 	time.sleep(2)
 
 finally:
